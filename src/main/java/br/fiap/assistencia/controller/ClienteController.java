@@ -3,10 +3,9 @@ package br.fiap.assistencia.controller;
 import br.fiap.assistencia.service.ClienteService;
 import br.fiap.assistencia.web.dto.ClienteRequest;
 import br.fiap.assistencia.web.dto.ClienteResponse;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/cliente")
@@ -20,6 +19,16 @@ public class ClienteController {
     @PostMapping("/salvar")
     public ClienteResponse salvar(@RequestBody ClienteRequest dto) {
         return service.salvar(dto);
+    }
+
+    @GetMapping("/pesquisar/{id}")
+    public ClienteResponse pesquisar(@PathVariable Long id) {
+        return service.pesquisar(id);
+    }
+
+    @GetMapping("/listar")
+    public List<ClienteResponse> listar() {
+        return service.listar();
     }
 
 }
