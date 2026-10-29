@@ -1,5 +1,6 @@
 package br.fiap.assistencia.service;
 
+import br.fiap.assistencia.config.SenhaConfig;
 import br.fiap.assistencia.domain.Cliente;
 import br.fiap.assistencia.mapper.ClienteMapper;
 import br.fiap.assistencia.repository.ClienteRepository;
@@ -14,15 +15,21 @@ import java.util.List;
 public class ClienteService {
     private final ClienteRepository repo;
     private final ClienteMapper mapper;
+    private final SenhaConfig senhaConfig;
 
-    public ClienteService(ClienteRepository repo, ClienteMapper mapper) {
+    public ClienteService(ClienteRepository repo,
+                          ClienteMapper mapper,
+                          SenhaConfig senhaConfig)  {
         this.repo = repo;
         this.mapper = mapper;
+        this.senhaConfig = senhaConfig;
     }
 
     @Transactional
     public ClienteResponse salvar(ClienteRequest dto) {
+        String hash = senhaConfig.passwordEncoder().encode(dto.senha());
         Cliente cliente = mapper.paraEntidade(dto);
+        cliente.setSenha(hash);
         Cliente aux = repo.save(cliente);
         return mapper.paraResposta(aux);
     }
